@@ -1,8 +1,8 @@
-name: Swift
+name: Build
 
 on: 
-- push
-- repository_dispatch
+  push:
+  repository_dispatch:
 
 jobs:
   build:

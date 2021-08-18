@@ -1,0 +1,26 @@
+name: Release
+
+on: 
+  repository_dispatch:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Release
+        run: swift build --configuration release
+        if: startsWith(github.ref, 'refs/tags/')
+      - name: Set binary path name
+        run: echo "::set-env name=BINARY_PATH::$(swift build --configuration release --show-bin-path)/systemaudio"
+        if: startsWith(github.ref, 'refs/tags/')
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{BINARY_PATH}}
