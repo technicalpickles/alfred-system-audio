@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "SimplyCoreAudio",
-        "repositoryURL": "/Users/technicalpickles/src/technicalpickles/SimplyCoreAudio",
+        "repositoryURL": "https://github.com/technicalpickles/SimplyCoreAudio",
         "state": {
           "branch": "4.0.1-fixed",
           "revision": "23ee2b3ad9fa1691631e332c173f28035880e73b",

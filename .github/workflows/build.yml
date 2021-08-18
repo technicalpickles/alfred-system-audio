@@ -11,5 +11,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: swift package resolve
       - name: Build
         run: swift build
