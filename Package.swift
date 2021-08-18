@@ -10,7 +10,8 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/rnine/SimplyCoreAudio.git", from: "4.0.1"),
+        // .package(url: "https://github.com/rnine/SimplyCoreAudio.git", from: "4.0.1"),
+        .package(url: "../SimplyCoreAudio", .branch("4.0.1-fixed")),
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [

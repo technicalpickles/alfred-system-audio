@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "SimplyCoreAudio",
-        "repositoryURL": "https://github.com/rnine/SimplyCoreAudio.git",
+        "repositoryURL": "/Users/technicalpickles/src/technicalpickles/SimplyCoreAudio",
         "state": {
-          "branch": null,
-          "revision": "e049672b919127f0dda41503699983d2c905cd83",
-          "version": "4.0.1"
+          "branch": "4.0.1-fixed",
+          "revision": "23ee2b3ad9fa1691631e332c173f28035880e73b",
+          "version": null
         }
       },
       {
