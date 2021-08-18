@@ -1,33 +1,54 @@
+import ArgumentParser
 import SimplyCoreAudio
 
-print("initializing SimplyCoreAudio")
 let simplyCA = SimplyCoreAudio()
-print("getting default output device")
 
-for device in simplyCA.allDevices {
-	let name = device.name 
-	let isOutput = device.channels(scope: .output) > 0
-	let isInput = device.channels(scope: .input) > 0
+struct SystemAudio: ParsableCommand {
+		@Flag(name: .shortAndLong, help: "Input devices")
+		var input = false
 
+		@Flag(name: .shortAndLong, help: "Output devices")
+		var output = false
 
-	if name != nil {
-		var display = "device: \(name)"
+    mutating func run() throws {
+			var devices : [AudioDevice]
 
-		// add output/input to display
-		if isOutput {
-			display += " (output)"
-			if device.isDefaultOutputDevice {
-				display += " (default)"
+			if input {
+				devices = simplyCA.allInputDevices
+			} else if output {
+				devices = simplyCA.allOutputDevices
+			} else {
+				devices = []
 			}
-		}
 
-		if isInput {
-			display += " (input)"
-			if device.isDefaultInputDevice {
-				display += " (default)"
+			for device in devices {
+				let name = device.name 
+				let isOutput = device.channels(scope: .output) > 0
+				let isInput = device.channels(scope: .input) > 0
+
+
+				if name != nil {
+					var display = "device: \(name)"
+
+					// add output/input to display
+					if isOutput {
+						display += " (output)"
+						if device.isDefaultOutputDevice {
+							display += " (default)"
+						}
+					}
+
+					if isInput {
+						display += " (input)"
+						if device.isDefaultInputDevice {
+							display += " (default)"
+						}
+					}
+
+					print(display)
+				}
 			}
-		}
-
-		print(display)
-	}
+    }
 }
+
+SystemAudio.main()
