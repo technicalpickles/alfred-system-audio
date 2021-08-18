@@ -16,7 +16,8 @@ jobs:
       - name: Build Release
         run: swift build --configuration release
       - name: Set binary path name
-        run: echo "::set-env name=BINARY_PATH::$(swift build --configuration release --show-bin-path)/systemaudio"
+        run: |
+          echo "BINARY_PATH=$(swift build --configuration release --show-bin-path)/systemaudio" >> $GITHUB_ENV
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
