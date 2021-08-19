@@ -8,13 +8,12 @@ on:
 
 jobs:
   build:
-
     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v2
       - name: Build Release
-        run: swift build --configuration release
+        run: swift build --configuration release --arch arm64 --arch x86_64
       - name: Set binary path name
         run: |
           echo "BINARY_PATH=$(swift build --configuration release --show-bin-path)/systemaudio" >> $GITHUB_ENV
