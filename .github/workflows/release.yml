@@ -13,11 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Release
-        run: swift build --configuration release --arch arm64 --arch x86_64
-      - name: Set binary path name
-        run: |
-          echo "BINARY_PATH=$(swift build --configuration release --show-bin-path)/systemaudio" >> $GITHUB_ENV
+        run: ./build.sh
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{env.BINARY_PATH}}
+          files: build/systemaudio dist/systemaudio.alfredworkflow
