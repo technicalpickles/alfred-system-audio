@@ -3,4 +3,6 @@
 /Packages
 /*.xcodeproj
 xcuserdata/
+/build/
+/dev/
 /dist/
