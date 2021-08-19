@@ -2,6 +2,10 @@
 
 Quickly change between different audio inputs and outputs using [Alfred](http://www.alfredapp.com).
 
+https://user-images.githubusercontent.com/159/130151282-d1d4d219-bd45-46ba-abf8-dc6f9fd16492.mp4
+
+https://user-images.githubusercontent.com/159/130151292-b7f65776-7989-43f9-a6d8-6b82a5726a51.mp4
+
 ## Installation
 
 Go to [Releases](https://github.com/technicalpickles/alfred-system-audio/releases), and download `systemaudio.alfredworkflow` from the latest release. Open it from Finder to install.
