@@ -17,4 +17,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/systemaudio dist/systemaudio.alfredworkflow
+          files: |
+            dist/systemaudio
+            dist/systemaudio.alfredworkflow
