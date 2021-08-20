@@ -14,6 +14,8 @@ Run `./dev.sh` to create a flattened, uncompressed workflow, and install it. You
 
 Run `./build.sh` to create the compressed `systemaudio.alfredworkflow` for testing it installs cleanly.
 
-## Inspiration
+## Credits and Inpsiration
 
 [Audio Switch](https://github.com/sampayo/Alfred-WorkFlows/tree/master/Audio%20Switch) workflow by [@sampayo](https://github.com/sampayo) was what I was using before I wrote this. I've re-used the icons from it until I can find better ones.
+
+[Soundwave icon](https://thenounproject.com/term/waveform/1786357/) by Maxim Kulikov from the Noun Project.
