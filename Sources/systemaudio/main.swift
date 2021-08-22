@@ -1,6 +1,6 @@
 import ArgumentParser
-import SimplyCoreAudio
 import Foundation
+import SimplyCoreAudio
 
 let simplyCA = SimplyCoreAudio()
 
@@ -12,8 +12,7 @@ struct SystemAudio: ParsableCommand {
 	var output = false
 
 	@Argument(help: "the device to use for new input or output")
-	var deviceUid : String?
-
+	var deviceUid: String?
 
 	mutating func run() throws {
 		var devices: [AudioDevice]
@@ -27,20 +26,21 @@ struct SystemAudio: ParsableCommand {
 		}
 
 		if deviceUid != nil {
-			let device = devices.first(where: { $0.uid == deviceUid })
+			let device = devices.first(where: { $0.uid == deviceUid })!
+
 			if input {
-				device?.isDefaultInputDevice = true
-				print(device!.name)
+				device.isDefaultInputDevice = true
+				print(device.name)
 			} else if output {
-				device?.isDefaultOutputDevice = true
-				print(device!.name)
+				device.isDefaultOutputDevice = true
+				print(device.name)
 			} else {
 				print("confusion!")
 			}
 			return
 		}
 
-		var response: [String : [Any]] = [:]
+		var response: [String: [Any]] = [:]
 		var items = [Any]()
 
 		for device in devices {
@@ -53,7 +53,6 @@ struct SystemAudio: ParsableCommand {
 			item["arg"] = device.uid
 			item["autocomplete"] = device.name
 
-			// add output/input to display
 			if isOutput {
 				item["icon"] = ["path": "output.png"]
 				if device.isDefaultOutputDevice {
