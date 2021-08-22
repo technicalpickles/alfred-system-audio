@@ -6,7 +6,7 @@ mkdir -p dev
 
 cd dev
 ln -sf ../alfred/* ./
-ln -sf ../.build/x86_64-apple-macosx/release/systemaudio .
+ln -sf ../.build/x86_64-apple-macosx/debug/systemaudio .
 
 prefs=~/Library/Preferences/com.runningwithcrayons.Alfred-Preferences.plist
 syncfolder=$(/usr/libexec/PlistBuddy -c "print :syncfolder" $prefs 2>/dev/null || echo)

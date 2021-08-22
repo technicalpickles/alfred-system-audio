@@ -1,5 +1,6 @@
 import ArgumentParser
 import SimplyCoreAudio
+import Foundation
 
 let simplyCA = SimplyCoreAudio()
 
@@ -11,7 +12,7 @@ struct SystemAudio: ParsableCommand {
 	var output = false
 
 	@Argument(help: "the device to use for new input or output")
-	var deviceName : String?
+	var deviceUid : String?
 
 
 	mutating func run() throws {
@@ -25,49 +26,55 @@ struct SystemAudio: ParsableCommand {
 			devices = []
 		}
 
-		if deviceName != nil {
-			let device = devices.first(where: { $0.name == deviceName })
+		if deviceUid != nil {
+			let device = devices.first(where: { $0.uid == deviceUid })
 			if input {
 				device?.isDefaultInputDevice = true
-				print(deviceName!)
+				print(device!.name)
 			} else if output {
 				device?.isDefaultOutputDevice = true
-				print(deviceName!)
+				print(device!.name)
 			} else {
 				print("confusion!")
 			}
 			return
 		}
 
-		print("<?xml version='1.0'?>")
-		print("<items>")
+		var response: [String : [Any]] = [:]
+		var items = [Any]()
 
 		for device in devices {
 			let isOutput = device.channels(scope: .output) > 0
 			let isInput = device.channels(scope: .input) > 0
 
-			let display = device.name
-			print("  <item uid='\(display)' arg='\(display)' valid='YES' autocomplete='\(display)'>")
-			print("    <title>\(display)</title>")
+			var item: [String: Any] = [:]
+			item["title"] = device.name
+			item["uid"] = device.uid
+			item["arg"] = device.uid
+			item["autocomplete"] = device.name
 
 			// add output/input to display
 			if isOutput {
-				print("  <icon>output.png</icon>")
+				item["icon"] = ["path": "output.png"]
 				if device.isDefaultOutputDevice {
-					print("  <subtitle> Currently selected </subtitle>")
+					item["subtitle"] = "Currently selected"
 				}
 			}
 
 			if isInput {
-				print("  <icon>input.png</icon>")
+				item["icon"] = ["path": "input.png"]
 				if device.isDefaultInputDevice {
-					print("  <subtitle> Currently selected </subtitle>")
+					item["subtitle"] = "Currently selected"
 				}
 			}
 
-			print("  </item>")
+			items.append(item)
 		}
-		print("<items>")
+		response["items"] = items
+
+		let jsonData = try JSONSerialization.data(withJSONObject: response, options: [])
+		let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)!
+		print(jsonString)
 	}
 }
 
