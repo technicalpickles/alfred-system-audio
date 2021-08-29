@@ -97,7 +97,7 @@
 				<key>runningsubtext</key>
 				<string>Getting input devices...</string>
 				<key>script</key>
-				<string>./systemaudio -i</string>
+				<string>./systemaudio --input --alfred</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -126,7 +126,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./systemaudio -i "$1"</string>
+				<string>./systemaudio --input --uid "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -190,7 +190,7 @@
 				<key>runningsubtext</key>
 				<string>Getting output devices...</string>
 				<key>script</key>
-				<string>./systemaudio -o</string>
+				<string>./systemaudio --output --alfred</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -219,7 +219,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>./systemaudio -o "$1"</string>
+				<string>./systemaudio --output --uid "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>

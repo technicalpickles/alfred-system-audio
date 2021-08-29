@@ -17,6 +17,9 @@ struct SystemAudio: ParsableCommand {
 	@Option(name: .shortAndLong, help: "the name of device to use for new input or output")
 	var name : String?
 
+	@Flag(name: .shortAndLong, help: "Generate output to be parsed by Alfred Script Filter")
+	var alfred : Bool = false
+
 	mutating func run() throws {
 		var devices: [AudioDevice]
 
@@ -52,40 +55,60 @@ struct SystemAudio: ParsableCommand {
 			return
 		}
 
-		var response: [String : [Any]] = [:]
-		var items = [Any]()
 
-		for device in devices {
-			let isOutput = device.channels(scope: .output) > 0
-			let isInput = device.channels(scope: .input) > 0
+		if alfred {
+			var response: [String : [Any]] = [:]
+			var items = [Any]()
 
-			var item: [String: Any] = [:]
-			item["title"] = device.name
-			item["uid"] = device.uid
-			item["arg"] = device.uid
-			item["autocomplete"] = device.name
+			for device in devices {
+				let isOutput = device.channels(scope: .output) > 0
+				let isInput = device.channels(scope: .input) > 0
 
-			if isOutput {
-				item["icon"] = ["path": "output.png"]
-				if device.isDefaultOutputDevice {
-					item["subtitle"] = "Currently selected"
+				var item: [String: Any] = [:]
+				item["title"] = device.name
+				item["uid"] = device.uid
+				item["arg"] = device.uid
+				item["autocomplete"] = device.name
+
+				if isOutput {
+					item["icon"] = ["path": "output.png"]
+					if device.isDefaultOutputDevice {
+						item["subtitle"] = "Currently selected"
+					}
 				}
+
+				if isInput {
+					item["icon"] = ["path": "input.png"]
+					if device.isDefaultInputDevice {
+						item["subtitle"] = "Currently selected"
+					}
+				}
+
+				items.append(item)
+			}
+			response["items"] = items
+
+			let jsonData = try JSONSerialization.data(withJSONObject: response, options: [])
+			let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)!
+			print(jsonString)
+		} else {
+			for device in devices {
+
+				let isOutput = device.channels(scope: .output) > 0
+				let isInput = device.channels(scope: .input) > 0
+
+				var outputString = "name: \(device.name), uid: \"\(device.uid!)\""
+
+				if (isOutput && device.isDefaultOutputDevice) || (isInput && device.isDefaultInputDevice) {
+					if device.isDefaultOutputDevice {
+						outputString.appending("(current)")
+					}
+				}
+
+				print(outputString)
 			}
 
-			if isInput {
-				item["icon"] = ["path": "input.png"]
-				if device.isDefaultInputDevice {
-					item["subtitle"] = "Currently selected"
-				}
-			}
-
-			items.append(item)
 		}
-		response["items"] = items
-
-		let jsonData = try JSONSerialization.data(withJSONObject: response, options: [])
-		let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)!
-		print(jsonString)
 	}
 }
 
