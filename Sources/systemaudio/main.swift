@@ -1,6 +1,6 @@
 import ArgumentParser
-import Foundation
 import SimplyCoreAudio
+import Foundation
 
 let simplyCA = SimplyCoreAudio()
 
@@ -11,8 +11,11 @@ struct SystemAudio: ParsableCommand {
 	@Flag(name: .shortAndLong, help: "Output devices")
 	var output = false
 
-	@Argument(help: "the device to use for new input or output")
-	var deviceUid: String?
+	@Option(name: .shortAndLong, help: "the UID of device to use for new input or output")
+	var uid : String?
+
+	@Option(name: .shortAndLong, help: "the name of device to use for new input or output")
+	var name : String?
 
 	mutating func run() throws {
 		var devices: [AudioDevice]
@@ -25,22 +28,31 @@ struct SystemAudio: ParsableCommand {
 			devices = []
 		}
 
-		if deviceUid != nil {
-			let device = devices.first(where: { $0.uid == deviceUid })!
+		var device: AudioDevice? = nil
 
+		if uid != nil {
+			device = devices.first(where: { $0.uid == uid })!
+		}
+
+		if name != nil {
+			device = devices.first(where: { $0.name == name })!
+		}
+
+		if (device != nil) {
 			if input {
-				device.isDefaultInputDevice = true
-				print(device.name)
+				device?.isDefaultInputDevice = true
+				print(device!.name)
 			} else if output {
-				device.isDefaultOutputDevice = true
-				print(device.name)
+				device?.isDefaultOutputDevice = true
+				print(device!.name)
 			} else {
 				print("confusion!")
 			}
+
 			return
 		}
 
-		var response: [String: [Any]] = [:]
+		var response: [String : [Any]] = [:]
 		var items = [Any]()
 
 		for device in devices {
