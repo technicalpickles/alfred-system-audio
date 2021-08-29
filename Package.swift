@@ -9,12 +9,13 @@ let package = Package(
         .macOS(.v10_12)
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
         // .package(url: "https://github.com/rnine/SimplyCoreAudio.git", from: "4.0.1"),
         .package(url: "https://github.com/technicalpickles/SimplyCoreAudio", .branch("4.0.1-fixed")),
         // .package(url: "../SimplyCoreAudio", .branch("4.0.1-fixed")),
-        // .package(url: /* package url */, from: "1.0.0"),
+
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.4.0"),
+        .package(url: "https://github.com/onevcat/Rainbow", .upToNextMajor(from: "4.0.0"))
+
 
     ],
     targets: [
@@ -24,7 +25,8 @@ let package = Package(
             name: "systemaudio",
             dependencies: [
                 "SimplyCoreAudio",
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Rainbow",
             ]),
         .testTarget(
             name: "systemaudioTests",

@@ -1,6 +1,7 @@
 import ArgumentParser
 import SimplyCoreAudio
 import Foundation
+import Rainbow
 
 let simplyCA = SimplyCoreAudio()
 
@@ -97,12 +98,10 @@ struct SystemAudio: ParsableCommand {
 				let isOutput = device.channels(scope: .output) > 0
 				let isInput = device.channels(scope: .input) > 0
 
-				var outputString = "name: \(device.name), uid: \"\(device.uid!)\""
+				var outputString = "\(device.name)"
 
 				if (isOutput && device.isDefaultOutputDevice) || (isInput && device.isDefaultInputDevice) {
-					if device.isDefaultOutputDevice {
-						outputString.appending("(current)")
-					}
+					outputString.append(" (current)".bold)
 				}
 
 				print(outputString)

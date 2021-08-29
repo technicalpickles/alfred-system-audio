@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Rainbow",
+        "repositoryURL": "https://github.com/onevcat/Rainbow",
+        "state": {
+          "branch": null,
+          "revision": "7c3dad0e918534c6d19dd1048bde734c246d05fe",
+          "version": "4.0.0"
+        }
+      },
+      {
         "package": "SimplyCoreAudio",
         "repositoryURL": "https://github.com/technicalpickles/SimplyCoreAudio",
         "state": {
