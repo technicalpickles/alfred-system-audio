@@ -94,11 +94,10 @@ struct SystemAudio: ParsableCommand {
 			print(jsonString)
 		} else {
 			for device in devices {
+				var outputString = "\(device.name)"
 
 				let isOutput = device.channels(scope: .output) > 0
 				let isInput = device.channels(scope: .input) > 0
-
-				var outputString = "\(device.name)"
 
 				if (isOutput && device.isDefaultOutputDevice) || (isInput && device.isDefaultInputDevice) {
 					outputString.append(" (current)".bold)
