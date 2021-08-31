@@ -14,9 +14,8 @@ let package = Package(
         // .package(url: "../SimplyCoreAudio", .branch("4.0.1-fixed")),
 
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.4.0"),
-        .package(url: "https://github.com/onevcat/Rainbow", .upToNextMajor(from: "4.0.0"))
-
-
+        .package(url: "https://github.com/onevcat/Rainbow", .upToNextMajor(from: "4.0.0")),
+        .package(url: "https://github.com/cfilipov/TextTable", .branch("master")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -24,9 +23,10 @@ let package = Package(
         .target(
             name: "systemaudio",
             dependencies: [
-                "SimplyCoreAudio",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Rainbow",
+                "TextTable",
+                "SimplyCoreAudio",
             ]),
         .testTarget(
             name: "systemaudioTests",

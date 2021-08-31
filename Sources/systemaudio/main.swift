@@ -2,6 +2,8 @@ import ArgumentParser
 import Foundation
 import Rainbow
 import SimplyCoreAudio
+import TextTable
+
 
 let simplyCA = SimplyCoreAudio()
 
@@ -96,18 +98,18 @@ struct SystemAudio: ParsableCommand {
 			let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)!
 			print(jsonString)
 		} else {
-			for device in devices {
-				var outputString = "\(device.name)"
 
-				let isOutput = device.channels(scope: .output) > 0
-				let isInput = device.channels(scope: .input) > 0
-
-				if (isOutput && device.isDefaultOutputDevice) || (isInput && device.isDefaultInputDevice) {
-					outputString.append(" (current)".bold)
-				}
-
-				print(outputString)
+			let table = TextTable<AudioDevice> {
+				let isOutput = $0.channels(scope: .output) > 0
+				let isInput = $0.channels(scope: .input) > 0
+				let isDefaultDevice = (isOutput && $0.isDefaultOutputDevice) || (isInput && $0.isDefaultInputDevice)
+				return [
+					Column("NAME" <- $0.name),
+					Column("UID" <- $0.uid!),
+					Column("DEFAULT" <- isDefaultDevice ? "Yes" : ""),
+				]
 			}
+			table.print(devices, style: Style.org)
 		}
 	}
 }
