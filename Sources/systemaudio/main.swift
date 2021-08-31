@@ -1,7 +1,7 @@
 import ArgumentParser
-import SimplyCoreAudio
 import Foundation
 import Rainbow
+import SimplyCoreAudio
 
 let simplyCA = SimplyCoreAudio()
 
@@ -13,26 +13,39 @@ struct SystemAudio: ParsableCommand {
 	var output = false
 
 	@Option(name: .shortAndLong, help: "the UID of device to use for new input or output")
-	var uid : String?
+	var uid: String?
 
 	@Option(name: .shortAndLong, help: "the name of device to use for new input or output")
-	var name : String?
+	var name: String?
 
 	@Flag(name: .shortAndLong, help: "Generate output to be parsed by Alfred Script Filter")
-	var alfred : Bool = false
+	var alfred: Bool = false
+
+	func setDefaultDevice(device: AudioDevice, isInput: Bool, isOutput: Bool) {
+		if isInput {
+			device.isDefaultInputDevice = true
+			print(device.name)
+		} else if isOutput {
+			device.isDefaultOutputDevice = true
+			print(device.name)
+		} else {
+			print("confusion!")
+		}
+	}
+
+	func devices(isInput _: Bool, isOutput _: Bool) -> [AudioDevice] {
+		if input {
+			return simplyCA.allInputDevices
+		} else if output {
+			return simplyCA.allOutputDevices
+		} else {
+			return []
+		}
+	}
 
 	mutating func run() throws {
-		var devices: [AudioDevice]
-
-		if input {
-			devices = simplyCA.allInputDevices
-		} else if output {
-			devices = simplyCA.allOutputDevices
-		} else {
-			devices = []
-		}
-
-		var device: AudioDevice? = nil
+		let devices = devices(isInput: input, isOutput: output)
+		var device: AudioDevice?
 
 		if uid != nil {
 			device = devices.first(where: { $0.uid == uid })!
@@ -42,34 +55,25 @@ struct SystemAudio: ParsableCommand {
 			device = devices.first(where: { $0.name == name })!
 		}
 
-		if (device != nil) {
-			if input {
-				device?.isDefaultInputDevice = true
-				print(device!.name)
-			} else if output {
-				device?.isDefaultOutputDevice = true
-				print(device!.name)
-			} else {
-				print("confusion!")
-			}
-
+		if device != nil {
+			setDefaultDevice(device: device!, isInput: input, isOutput: output)
 			return
 		}
 
-
 		if alfred {
-			var response: [String : [Any]] = [:]
-			var items = [Any]()
+			// see https://www.alfredapp.com/help/workflows/inputs/script-filter/json/ for spec of alfred output
+			var response: [String: [Any]] = [:]
 
-			for device in devices {
+			response["items"] = devices.map { device -> Any in
 				let isOutput = device.channels(scope: .output) > 0
 				let isInput = device.channels(scope: .input) > 0
 
-				var item: [String: Any] = [:]
-				item["title"] = device.name
-				item["uid"] = device.uid
-				item["arg"] = device.uid
-				item["autocomplete"] = device.name
+				var item: [String: Any] = [
+					"title": device.name,
+					"uid": device.uid!,
+					"arg": device.uid!,
+					"autocomplete": device.name,
+				]
 
 				if isOutput {
 					item["icon"] = ["path": "output.png"]
@@ -85,9 +89,8 @@ struct SystemAudio: ParsableCommand {
 					}
 				}
 
-				items.append(item)
+				return item
 			}
-			response["items"] = items
 
 			let jsonData = try JSONSerialization.data(withJSONObject: response, options: [])
 			let jsonString = String(data: jsonData, encoding: String.Encoding.ascii)!
@@ -105,7 +108,6 @@ struct SystemAudio: ParsableCommand {
 
 				print(outputString)
 			}
-
 		}
 	}
 }
