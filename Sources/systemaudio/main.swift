@@ -7,7 +7,7 @@ import TextTable
 
 let simplyCA = SimplyCoreAudio()
 
-struct SystemAudio: ParsableCommand {
+struct SystemAudioCommand: ParsableCommand {
 	@Flag(name: .shortAndLong, help: "Input devices")
 	var input = false
 
@@ -114,4 +114,4 @@ struct SystemAudio: ParsableCommand {
 	}
 }
 
-SystemAudio.main()
+SystemAudioCommand.main()
